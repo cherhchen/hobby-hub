@@ -4,6 +4,7 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import NavBar from './components/NavBar'
 import Post from './components/Post'
+import { supabase } from './client'
 
 function App() {
   const [count, setCount] = useState(0)
