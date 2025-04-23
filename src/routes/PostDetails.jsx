@@ -83,9 +83,15 @@ const PostDetails = () => {
             .from("Posts")
             .delete()
             .eq("id", id);
-        console.log(data, error);
-        alert("Post deleted!");
-        redirectHome();
+        if (error) {
+            console.error('Error fetching data:', error);
+        } else if (data) {
+            console.log('Data fetched successfully:', data);
+        } else {
+            console.log('No data found with that ID.');
+            alert("Post deleted!");
+            redirectHome();
+        }
     }
 
     const handleCommentSubmit = async () => {

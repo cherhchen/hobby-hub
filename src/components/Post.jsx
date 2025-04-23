@@ -1,7 +1,5 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import './Post.css';
-import { supabase } from '../client';
 
 // post object type
 // post = {

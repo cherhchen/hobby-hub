@@ -2,6 +2,7 @@ import NavBar from "../components/NavBar";
 import { useState, useEffect } from "react";
 import { supabase } from "../client";
 import { useParams } from "react-router";
+import { useNavigate } from 'react-router';
 import './CreatePost.css'
 
 const EditPost = () => {
@@ -11,6 +12,11 @@ const EditPost = () => {
         content: '',
         image_url: '',
     });
+
+    const navigate = useNavigate();
+    const redirectPostDetails = () => {
+        navigate(`/details/${id}`); // Navigate to the post details page
+    };
 
     useEffect(() => {
         const fetchPost = async () => {
@@ -51,9 +57,9 @@ const EditPost = () => {
             setFormData(data);
         } else {
             console.log('No data found with that ID.');
+            alert("Post updated!");
+            redirectPostDetails();
         }
-        console.log(data, error)
-        alert("Post updated!");
     };
 
     return (
