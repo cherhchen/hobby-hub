@@ -14,6 +14,7 @@ const PostDetails = () => {
     const [likeCount, setLikeCount] = useState(0);
     const [comments, setComments] = useState([]);
     const [comment, setComment] = useState('');
+    const [isHovered, setIsHovered] = useState(false);
 
     useEffect(() => {
             const fetchPostAndComments = async () => {
@@ -111,8 +112,16 @@ const PostDetails = () => {
                     {post.image_url && <img src={post.image_url} alt="Post" className="post-image" />}
                     <div className="icon-button-container">
                         <div className="icon-container">
-                            <div onClick={handleLike} className="inner-icon-box">
-                                <ThumbsUp fillColor="none" className="icon"/>
+                            <div 
+                                onMouseEnter={() => setIsHovered(true)}
+                                onMouseLeave={() => setIsHovered(false)}
+                                onClick={handleLike} 
+                                className="inner-icon-box"
+                            >
+                                <ThumbsUp 
+                                    fillColor={isHovered ? "#7ee8c3" : "none"}
+                                    className="icon"
+                                />
                             </div>
                             <p className="text-black">{likeCount} Upvotes</p>
                         </div>

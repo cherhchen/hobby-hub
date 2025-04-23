@@ -3,7 +3,9 @@ import './NavBar.css'; // We'll create this file next
 const NavBar = ({ isHome, setSearchTerm }) => {
   return (
     <nav className="navbar">
-        <div className="logo">HobbyHub</div>
+        <a href="/">
+          <div className="logo">AnimalHub</div>
+        </a>
         <div className="search-bar">
             { isHome &&
                 <input 
