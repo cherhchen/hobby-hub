@@ -82,6 +82,8 @@ GIF created with LICEcap
 I had a race condition issue with incrementing the like count.
 If the user incremented too quickly, the like count would not be correct (one like lower than it should be).
 I used Supabase's remote procedure calls (functions) to fix this.
+Supabase keys are not provided (you should make an .env file).
+Two tables were used (Posts and Comments). Posts contains id, created_at, title, content, image_url, and num_likes. Comments contains id, created_at, post_id (foreign key), and comment.
 
 ## License
 
