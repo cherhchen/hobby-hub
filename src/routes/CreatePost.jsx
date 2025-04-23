@@ -1,23 +1,32 @@
 import NavBar from "../components/NavBar";
 import { useState } from "react";
 import './CreatePost.css'
+import { supabase } from "../client";
 
 const CreatePost = () => {
-    const [formData, setFormData] = useState({
-        title: '',
-        content: '',
-        imageUrl: ''
-    });
+    const emptyPost = {
+        title: "",
+        content: "",
+        image_url: "",
+    };
+    const [formData, setFormData] = useState({...emptyPost});
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({...prev, [name]: value}));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         console.log('Post Created:', formData);
         // TODO: Send this data to your backend or state store
+        const { data, error } = await supabase.from("Posts").insert(formData);
+        if (error) {
+            console.error('Error creating post:', error);
+        } else {
+            console.log('Post created successfully:', data);
+            setFormData({...emptyPost});
+        }
     };
 
     return (
@@ -48,12 +57,12 @@ const CreatePost = () => {
                             rows="6"
                         />
 
-                        <label htmlFor="imageUrl">Image URL</label>
+                        <label htmlFor="image_url">Image URL</label>
                         <input
                             type="url"
-                            id="imageUrl"
-                            name="imageUrl"
-                            value={formData.imageUrl}
+                            id="image_url"
+                            name="image_url"
+                            value={formData.image_url}
                             onChange={handleChange}
                             placeholder="Enter image URL (optional)"
                         />

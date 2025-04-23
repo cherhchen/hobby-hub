@@ -1,12 +1,16 @@
 import './NavBar.css'; // We'll create this file next
 
-const NavBar = ({ isHome }) => {
+const NavBar = ({ isHome, setSearchTerm }) => {
   return (
     <nav className="navbar">
         <div className="logo">HobbyHub</div>
         <div className="search-bar">
-            { isHome ??
-                <input type="text" placeholder="Search..." />
+            { isHome &&
+                <input 
+                  type="text" 
+                  placeholder="Search..." 
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
             }
         </div>
         <ul className="nav-links">

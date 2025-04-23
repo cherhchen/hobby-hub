@@ -60,13 +60,18 @@ body {
   margin-top: 100px; /* Account for Nav Bar */
 }
 
-.content-box {
-  width: 80%;
-  margin: auto;
-  background-color: white;
-  text-align: left;
-  padding: 1rem;
+.order-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-left: 10%;
   margin-bottom: 2rem;
-  border-radius: 10px;
-  min-height: 200px;
+  align-items: center;
+}
+
+.order-button {
+  background-color: rgb(126, 232, 195);
+}
+
+.order-button-selected {
+  background-color: rgb(58, 202, 171);
 }
