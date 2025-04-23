@@ -17,51 +17,60 @@ const PostDetails = () => {
     const [isHovered, setIsHovered] = useState(false);
 
     useEffect(() => {
-            const fetchPostAndComments = async () => {
-                const { data: postData, error: postError } = await supabase
-                    .from('Posts')
-                    .select('*')
-                    .eq('id', id)
-                    .single(); // Fetch a single post by ID
-    
-                if (postError) {
-                    console.error('Error fetching post:', postError);
-                } else {
-                    setPost(postData);
-                    setLikeCount(postData.num_likes);
-                    console.log('Post fetched:', postData);
-                }
-    
-                const { data: commentsData, error: commentsError } = await supabase
-                    .from('Comments')
-                    .select('*')
-                    .eq('post_id', id); // Fetch comments for the post
-                
-                if (commentsError) {
-                    console.error('Error fetching comments:', commentsError);
-                } else {
-                    setComments(commentsData);
-                    console.log('Comments fetched:', commentsData);
-                }
-                setLoading(false);
-            };
-    
-            fetchPostAndComments();
+        const fetchPostAndComments = async () => {
+            const { data: postData, error: postError } = await supabase
+                .from('Posts')
+                .select('*')
+                .eq('id', id)
+                .single(); // Fetch a single post by ID
+
+            if (postError) {
+                console.error('Error fetching post:', postError);
+            } else {
+                setPost(postData);
+                setLikeCount(postData.num_likes);
+                console.log('Post fetched:', postData);
+            }
+
+            const { data: commentsData, error: commentsError } = await supabase
+                .from('Comments')
+                .select('*')
+                .eq('post_id', id); // Fetch comments for the post
+            
+            if (commentsError) {
+                console.error('Error fetching comments:', commentsError);
+            } else {
+                setComments(commentsData);
+                console.log('Comments fetched:', commentsData);
+            }
+            setLoading(false);
+        };
+
+        fetchPostAndComments();
         }, [id]);
     
     const handleLike = async () => {
-        supabase
-            .from('Posts')
-            .update({ num_likes: post.num_likes + 1 })
-            .eq('id', post.id)
-            .then(({ data, error }) => {
-                if (error) {
-                    console.error('Error liking post:', error);
-                } else {
-                    console.log('Post liked successfully:', data);
-                    setLikeCount(likeCount + 1);
-                }
-            });
+        // Prevent race condition from post.num_likes + 1
+        const { data, error } = await supabase.rpc('increment_like', { row_id: post.id });
+        if (error) {
+            console.error('Error liking post:', error);
+        } else {
+            console.log('Post liked successfully:', data);
+            setLikeCount(likeCount => likeCount + 1);
+        }
+
+        // supabase
+        //     .from('Posts')
+        //     .update({ num_likes: post.num_likes + 1 }) // Race condition
+        //     .eq('id', post.id)
+        //     .then(({ data, error }) => {
+        //     if (error) {
+        //         console.error('Error liking post:', error);
+        //     } else {
+        //         console.log('Post liked successfully:', data);
+        //         setLikeCount(likeCount => likeCount + 1);
+        //     }
+        // });
     }
 
     const redirectHome = () => {
