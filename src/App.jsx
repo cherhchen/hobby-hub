@@ -60,7 +60,7 @@ function App() {
             />
           ))
         ) : (
-          <p>Create the first post!</p>
+          <p>No post!</p>
         )}
       </div>
     </div>

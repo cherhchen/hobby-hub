@@ -27,6 +27,7 @@ const CreatePost = () => {
             console.log('Post created successfully:', data);
             setFormData({...emptyPost});
         }
+        alert("Post created!");
     };
 
     return (
