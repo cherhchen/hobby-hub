@@ -35,3 +35,33 @@
     display: flex;
     gap: 1rem;
 }
+
+.comments-section {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    gap: 1rem;
+}
+
+.comment {
+    background-color: rgb(240, 240, 240);
+    padding: 10px;
+    border-radius: 0.5rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    max-width: 100%;
+}
+
+.comments-section textarea {
+    width: 100%;
+    min-height: 3rem;
+    padding: 10px;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.comment-button {
+    width: 30%;
+    background-color: rgb(126, 232, 195);
+}

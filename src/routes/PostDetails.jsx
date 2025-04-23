@@ -12,27 +12,41 @@ const PostDetails = () => {
     const [post, setPost] = useState(null);
     const [loading, setLoading] = useState(true);
     const [likeCount, setLikeCount] = useState(0);
+    const [comments, setComments] = useState([]);
+    const [comment, setComment] = useState('');
 
     useEffect(() => {
-        const fetchPost = async () => {
-            const { data, error } = await supabase
-                .from('Posts')
-                .select('*')
-                .eq('id', id)
-                .single(); // Fetch a single post by ID
-
-            if (error) {
-                console.error('Error fetching post:', error);
-            } else {
-                setPost(data);
-                setLikeCount(data.num_likes);
-                console.log('Post fetched:', data);
-            }
-            setLoading(false);
-        };
-
-        fetchPost();
-    }, [id]);
+            const fetchPostAndComments = async () => {
+                const { data: postData, error: postError } = await supabase
+                    .from('Posts')
+                    .select('*')
+                    .eq('id', id)
+                    .single(); // Fetch a single post by ID
+    
+                if (postError) {
+                    console.error('Error fetching post:', postError);
+                } else {
+                    setPost(postData);
+                    setLikeCount(postData.num_likes);
+                    console.log('Post fetched:', postData);
+                }
+    
+                const { data: commentsData, error: commentsError } = await supabase
+                    .from('Comments')
+                    .select('*')
+                    .eq('post_id', id); // Fetch comments for the post
+                
+                if (commentsError) {
+                    console.error('Error fetching comments:', commentsError);
+                } else {
+                    setComments(commentsData);
+                    console.log('Comments fetched:', commentsData);
+                }
+                setLoading(false);
+            };
+    
+            fetchPostAndComments();
+        }, [id]);
     
     const handleLike = async () => {
         supabase
@@ -62,6 +76,20 @@ const PostDetails = () => {
         console.log(data, error);
         alert("Post deleted!");
         redirectHome();
+    }
+
+    const handleCommentSubmit = async () => {
+        const { data, error } = await supabase
+            .from('Comments')
+            .insert([{ comment, post_id: id }]);
+
+        if (error) {
+            console.error('Error adding comment:', error);
+        } else {
+            console.log('Comment added successfully:');
+            setComments([...comments, { comment }]);
+            setComment('');
+        }
     }
 
     if (loading) {
@@ -95,8 +123,23 @@ const PostDetails = () => {
                             <button onClick={handleDelete}>Delete</button>
                         </div>
                     </div>
-                    <div>
+                    <div className="comments-section">
                         <h3>Comments</h3>
+                        {comments.length > 0 ? (
+                            comments.map((comment) => (
+                                <div key={comment.comment} className="comment">
+                                    <p className="text-black">{comment.comment}</p>
+                                </div>
+                            ))
+                        ) : (
+                            <p>No comments yet.</p>
+                        )}
+                        <textarea
+                            value={comment}
+                            onChange={(e) => setComment(e.target.value)}
+                            placeholder="Add a comment..."
+                        />
+                        <button onClick={handleCommentSubmit} className="comment-button">Add Comment</button>
                     </div>
                 </div>
             </div>
